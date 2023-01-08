@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import './widgets/transaction_list.dart';
-//import './widgets/user_transaction.dart';
 import './widgets/new_transaction.dart';
 import './models/transaction.dart';
+import './widgets/chart.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,8 +17,24 @@ class MyApp extends StatelessWidget {
         // accentColor: Colors.amber,
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blueGrey)
             .copyWith(secondary: Colors.amber),
+        errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
+              labelSmall: TextStyle(
+                color: Colors.white,
+                fontFamily: 'AnekTamil',
+                fontSize: 14,
+              ),
+              labelMedium: TextStyle(
+                color: Colors.white,
+                fontFamily: 'AnekTamil',
+                fontSize: 16,
+              ),
+              labelLarge: TextStyle(
+                color: Colors.white,
+                fontFamily: 'AnekTamil',
+                fontSize: 18,
+              ),
               titleSmall: TextStyle(
                 fontFamily: 'AnekTamil',
                 fontSize: 14,
@@ -73,7 +89,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransaction = [
+  final List<Transaction> _userTransactions = [
     // Transaction(
     //   id: 't1',
     //   title: 'New Shoes',
@@ -88,17 +104,31 @@ class _MyHomePageState extends State<MyHomePage> {
     // ),
   ];
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(
+    String txTitle,
+    double txAmount,
+    DateTime chosenDate,
+  ) {
     final nexTx = Transaction(
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: chosenDate,
       id: DateTime.now().toString(),
     );
 
     setState(() {
-      _userTransaction.add(nexTx);
+      _userTransactions.add(nexTx);
     });
+  }
+
+  List<Transaction> get _recentTransactions {
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
   }
 
   //late String titleInput;
@@ -114,6 +144,12 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((tx) => tx.id == id);
+    });
   }
 
   @override
@@ -136,17 +172,12 @@ class _MyHomePageState extends State<MyHomePage> {
           //mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              //alignment: Alignment.center,
-              width: double.infinity,
-              child: Card(
-                color: Colors.blueAccent,
-                child: Text('CHART!'),
-                elevation: 5,
-              ),
-            ),
+            Chart(_recentTransactions),
             //UserTransaction(),
-            TransactionList(transactions: _userTransaction)
+            TransactionList(
+              transactions: _userTransactions,
+              deleteTx: _deleteTransaction,
+            )
           ],
         ),
       ),

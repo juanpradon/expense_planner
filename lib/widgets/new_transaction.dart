@@ -70,19 +70,19 @@ class _NewTransactionState extends State<NewTransaction> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 //onChanged: (value) => titleInput = value,
                 controller: _titleController,
                 onSubmitted: (_) => _submitData(),
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 //onChanged: (value) => amountInput = value,
                 controller: _amountController,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 onSubmitted: (_) => _submitData(),
               ),
-              Container(
+              SizedBox(
                 height: 65,
                 child: Row(
                   children: [
@@ -96,12 +96,12 @@ class _NewTransactionState extends State<NewTransaction> {
                 ),
               ),
               ElevatedButton(
-                child: Text('Add Transaction'),
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.purple,
                 ),
                 onPressed: _submitData,
+                child: const Text('Add Transaction'),
               )
             ],
           ),

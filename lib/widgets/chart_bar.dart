@@ -5,7 +5,7 @@ class ChartBar extends StatelessWidget {
   final double speedingAmount;
   final double speedingPctOfTotal;
 
-  ChartBar(this.label, this.speedingAmount, this.speedingPctOfTotal);
+  const ChartBar(this.label, this.speedingAmount, this.speedingPctOfTotal);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class ChartBar extends StatelessWidget {
           SizedBox(
             height: constrains.maxHeight * 0.05,
           ),
-          Container(
+          SizedBox(
             height: constrains.maxHeight * 0.15,
             child: FittedBox(
               child: Text(label),
